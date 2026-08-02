@@ -18,6 +18,8 @@ Each change to the header or payload offers three modes:
 
 **Remove signature** strips the third segment and leaves the trailing dot, ready for `alg:none` and other signature validation tests.
 
+**Re-sign** signs the token with a key you provide, using whatever algorithm is set in the header. Supports HS256/384/512, RS256/384/512, ES256/384/512, and PS256/384/512. For HMAC you provide the secret string; for RSA/EC/PSS you provide a path to a PEM private key.
+
 All changes are cumulative. The reassembled token is printed after every operation.
 
 ## Example
@@ -36,7 +38,7 @@ Body:      {
 }
 Signature: c2lnbmF0dXJl
 
-1) Change header  2) Change body  3) Remove signature  q) Quit
+1) Change header  2) Change body  3) Signature  q) Quit
 Choice: 1
 1) Replace entire header  2) Merge segment  3) Remove key
 Choice [1/2/3]: 2
@@ -54,7 +56,7 @@ Signature: c2lnbmF0dXJl
 
 JWT: eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MH0.c2lnbmF0dXJl
 
-1) Change header  2) Change body  3) Remove signature  q) Quit
+1) Change header  2) Change body  3) Signature  q) Quit
 Choice: 2
 1) Replace entire body  2) Merge segment  3) Remove key
 Choice [1/2/3]: 2
@@ -72,8 +74,10 @@ Signature: c2lnbmF0dXJl
 
 JWT: eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MX0.c2lnbmF0dXJl
 
-1) Change header  2) Change body  3) Remove signature  q) Quit
+1) Change header  2) Change body  3) Signature  q) Quit
 Choice: 3
+1) Remove signature  2) Re-sign with key
+Choice [1/2]: 1
 
 Header:    {
   "typ": "JWT",
@@ -88,9 +92,22 @@ Signature: (removed)
 JWT: eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MX0.
 ```
 
-## Requirements
+## Installation
 
-Python 3.6+. No external dependencies.
+```
+git clone https://github.com/scifeks/voorhees.git
+cd voorhees
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Usage
+
+```
+source .venv/bin/activate
+python3 voorhees.py
+```
 
 ## Disclaimer
 
